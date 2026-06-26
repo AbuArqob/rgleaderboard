@@ -932,30 +932,6 @@ window.openEdit = function(
   }
 };
 
-  if(!admin) return;
-
-  editingPlayerId = id;
-
-  document.getElementById("editBox").style.display = "block";
-
-  document.getElementById("editName").value = name;
-
-  document.getElementById("editMMR").value = mmr;
-
-  document.getElementById("editFlag").value = flag || "";
-  
-  document.getElementById("editIcons").value =
-    icons || "";
-    
-  document.getElementById("editIconSize").value =
-    iconSize || 18;
-
-  document.getElementById("editGlowColor").value =
-    glowColor || "#ffffff";
-  
-  document.getElementById("editGlowStrength").value =
-    glowStrength || 0;
-
 }
 
 window.saveEdit = async function(){
