@@ -606,16 +606,8 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut,
-  onAuthStateChanged,
   signInWithRedirect,
-  getRedirectResult
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
+  getRedirectResult,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -641,8 +633,8 @@ const db = getFirestore(app);
 
 const auth = getAuth(app);
 
-await getRedirectResult(auth);
-
+getRedirectResult(auth).catch(console.error);
+  
 const provider = new GoogleAuthProvider();
 
 const leaderboardRef = collection(db,"leaderboard");
