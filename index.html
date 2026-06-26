@@ -1034,12 +1034,33 @@ onSnapshot(leaderboardRef, (snap) => {
         if (winsTable) {
           winsTable.innerHTML += `
             <tr>
-              <td class="${rankClass}">#${index + 1}</td>
-              <td class="${rankClass}">${displayName}</td>
-              <td>${player.wins || 0}</td>
-              <td>${player.matches || 0}</td>
-              <td>${winRate}%</td>
-            </tr>
+  <td class="${rankClass}">#${index + 1}</td>
+  <td class="${rankClass}">${displayName}</td>
+  <td>${player.wins || 0}</td>
+  <td>${player.matches || 0}</td>
+  <td>${winRate}%</td>
+
+  <td>
+    <button class="action-btn"
+      onclick="openEdit(
+        '${player.id}',
+        '${player.name}',
+        ${player.mmr || 0},
+        '${player.flag || ""}',
+        '${player.icons || ""}',
+        '${player.glowColor || "#ffffff"}',
+        ${player.glowStrength || 0},
+        ${player.iconSize || 18}
+      )">
+      Edit
+    </button>
+
+    <button class="action-btn"
+      onclick="deletePlayer('${player.id}')">
+      Remove
+    </button>
+  </td>
+</tr>
           `;
         }
 
