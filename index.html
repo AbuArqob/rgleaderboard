@@ -578,7 +578,7 @@ button:hover{
 </div>
 
 <p class="note" style="opacity:1; color:white; text-shadow:0 0 3px black;">
-  Created by Vistvy
+  Created by Vistvy, updated by Pal
   <br><br>
   If you want to be added to the leaderboard, or need your ranking updated, mention @vistvy or @pal153 in the
   <a href="https://discord.gg/DueTkZdxEB" target="_blank" style="color:#38bdf8; text-decoration:underline;">
@@ -601,6 +601,16 @@ import {
   doc,
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  signInWithRedirect,
+  getRedirectResult
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
   getAuth,
@@ -631,6 +641,8 @@ const db = getFirestore(app);
 
 const auth = getAuth(app);
 
+await getRedirectResult(auth);
+
 const provider = new GoogleAuthProvider();
 
 const leaderboardRef = collection(db,"leaderboard");
@@ -639,7 +651,6 @@ const iconKeyRef = collection(db,"iconKey");
 
 /* PUT YOUR EMAILS HERE */
 const adminEmails = [
-  "c.emotimi@gmail.com",
   "underflagfg@gmail.com"
 ];
 
@@ -651,8 +662,8 @@ window.login = async function(){
 
   try{
 
-    await signInWithPopup(auth, provider);
-
+await signInWithRedirect(auth, provider);
+    
   } catch(err){
 
     alert(err.message);
