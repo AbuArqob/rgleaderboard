@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<button onclick="testLogin()">TEST LOGIN</button>
 <title>Rocket Goal.io Ranked Leaderboards</title>
 <link rel="icon" href="favicon.ico">
 <style>
@@ -485,17 +484,6 @@ const firebaseConfig = {
   messagingSenderId: "247848634543",
   appId: "1:247848634543:web:6a7e506d60544d46cc6c5a",
   measurementId: "G-JW3Q972P9T"
-};
-
-
-window.testLogin = async function () {
-  try {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    console.log(result.user.email);
-  } catch (e) {
-    console.log("ERROR:", e.code, e.message);
-  }
 };
 
 const app = initializeApp(firebaseConfig);
