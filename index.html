@@ -1005,138 +1005,158 @@ onSnapshot(leaderboardRef, (snap) => {
     });
   });
 
-  Object.keys(boards).forEach((mode) => {
+Object.keys(boards).forEach((mode) => {
 
-    const mmrTable = document.getElementById(`board${mode}`);
-    const winsTable = document.getElementById(`wboard${mode}`);
+  const mmrTable = document.getElementById(`board${mode}`);
+  const winsTable = document.getElementById(`wboard${mode}`);
 
-    if (mmrTable) mmrTable.innerHTML = "";
-    if (winsTable) winsTable.innerHTML = "";
+  if (mmrTable) mmrTable.innerHTML = "";
+  if (winsTable) winsTable.innerHTML = "";
 
-    const winsPlayers = boards[mode].filter(p => p.type === "wins");
-const mmrPlayers = boards[mode].filter(p => p.type !== "wins");
+  // =========================
+  // SPLIT DATA (IMPORTANT FIX)
+  // =========================
+  const mmrPlayers = boards[mode]
+    .filter(p => p.type === "mmr")
+    .sort((a, b) => (b.mmr || 0) - (a.mmr || 0));
 
-winsPlayers.sort((a, b) => (b.wins || 0) - (a.wins || 0));
-mmrPlayers.sort((a, b) => (b.mmr || 0) - (a.mmr || 0));
+  const winsPlayers = boards[mode]
+    .filter(p => p.type === "wins")
+    .sort((a, b) => (b.wins || 0) - (a.wins || 0));
 
-boards[mode] = [...mmrPlayers, ...winsPlayers];
+  // =========================
+  // MMR TABLE
+  // =========================
+  mmrPlayers.forEach((player, index) => {
 
-    boards[mode].forEach((player, index) => {
+    const rankClass =
+      index === 0 ? "top1" :
+      index === 1 ? "top2" :
+      index === 2 ? "top3" : "";
 
-      const rankClass =
-        index === 0 ? "top1" :
-        index === 1 ? "top2" :
-        index === 2 ? "top3" : "";
+    const iconHTML = player.icons
+      ? player.icons.split(",").map(icon => `
+          <img class="playerIcon"
+            src="${icon.trim()}"
+            style="--icon-size:${player.iconSize || 18}px">
+        `).join("")
+      : "";
 
-      const iconHTML = player.icons
-        ? player.icons.split(",").map(icon => `
-            <img class="playerIcon"
-              src="${icon.trim()}"
-              style="--icon-size:${player.iconSize || 18}px">
-          `).join("")
-        : "";
+    const displayName = `
+      ${player.flag ? `<img class="flagIcon" src="${player.flag}">` : ""}
+      <span class="playerName"
+        style="${player.glowStrength > 0
+          ? `text-shadow: 0 0 ${player.glowStrength}px ${player.glowColor}`
+          : ""}">
+        ${player.name}
+      </span>
+      ${iconHTML}
+    `;
 
-      const displayName = `
-        ${player.flag ? `<img class="flagIcon" src="${player.flag}">` : ""}
-        <span class="playerName"
-          style="${player.glowStrength > 0
-            ? `text-shadow: 0 0 ${player.glowStrength}px ${player.glowColor}`
-            : ""}">
-          ${player.name}
-        </span>
-        ${iconHTML}
+    if (mmrTable) {
+      mmrTable.innerHTML += `
+        <tr>
+          <td class="${rankClass}">#${index + 1}</td>
+          <td class="${rankClass}">${displayName}</td>
+          <td>${player.mmr || 0}</td>
+          <td>
+            <button class="action-btn"
+              onclick="openEdit(
+                '${player.id}',
+                '${player.type}',
+                '${player.name}',
+                ${player.mmr || 0},
+                0,
+                0,
+                '${player.flag || ""}',
+                '${player.icons || ""}',
+                '${player.glowColor || "#ffffff"}',
+                ${player.glowStrength || 0},
+                ${player.iconSize || 18}
+              )">
+              Edit
+            </button>
+
+            <button class="action-btn"
+              onclick="deletePlayer('${player.id}')">
+              Remove
+            </button>
+          </td>
+        </tr>
       `;
-
-      // ======================
-      // WIN MODE TABLE
-      // ======================
-      if (player.type === "wins") {
-
-        const winRate = player.matches > 0
-          ? ((player.wins / player.matches) * 100).toFixed(1)
-          : "0.0";
-
-        if (winsTable) {
-          winsTable.innerHTML += `
-            <tr>
-  <td class="${rankClass}">#${index + 1}</td>
-  <td class="${rankClass}">${displayName}</td>
-  <td>${player.wins || 0}</td>
-  <td>${player.matches || 0}</td>
-  <td>${winRate}%</td>
-
-  <td>
-    <button class="action-btn"
-    onclick="openEdit(
-  '${player.id}',
-  '${player.type}',
-  '${player.name}',
-  ${player.mmr || 0},
-  ${player.wins || 0},
-  ${player.matches || 0},
-  '${player.flag || ""}',
-  '${player.icons || ""}',
-  '${player.glowColor || "#ffffff"}',
-  ${player.glowStrength || 0},
-  ${player.iconSize || 18}
-)">
-      Edit
-    </button>
-
-    <button class="action-btn"
-      onclick="deletePlayer('${player.id}')">
-      Remove
-    </button>
-  </td>
-</tr>
-          `;
-        }
-
-      }
-
-      // ======================
-      // MMR MODE TABLE
-      // ======================
-      else {
-
-        if (mmrTable) {
-          mmrTable.innerHTML += `
-            <tr>
-              <td class="${rankClass}">#${index + 1}</td>
-              <td class="${rankClass}">${displayName}</td>
-             <td>${player.mmr || 0}</td>
-
-<td>
-  <button class="action-btn"
-    onclick="openEdit(
-      '${player.id}',
-      '${player.type}',
-      '${player.name}',
-      ${player.mmr || 0},
-      0,
-      0,
-      '${player.flag || ""}',
-      '${player.icons || ""}',
-      '${player.glowColor || "#ffffff"}',
-      ${player.glowStrength || 0},
-      ${player.iconSize || 18}
-    )">
-    Edit
-  </button>
-
-  <button class="action-btn"
-    onclick="deletePlayer('${player.id}')">
-    Remove
-  </button>
-</td>
-            </tr>
-          `;
-        }
-      }
-
-    });
-
+    }
   });
+
+  // =========================
+  // WINS TABLE
+  // =========================
+  winsPlayers.forEach((player, index) => {
+
+    const rankClass =
+      index === 0 ? "top1" :
+      index === 1 ? "top2" :
+      index === 2 ? "top3" : "";
+
+    const iconHTML = player.icons
+      ? player.icons.split(",").map(icon => `
+          <img class="playerIcon"
+            src="${icon.trim()}"
+            style="--icon-size:${player.iconSize || 18}px">
+        `).join("")
+      : "";
+
+    const displayName = `
+      ${player.flag ? `<img class="flagIcon" src="${player.flag}">` : ""}
+      <span class="playerName"
+        style="${player.glowStrength > 0
+          ? `text-shadow: 0 0 ${player.glowStrength}px ${player.glowColor}`
+          : ""}">
+        ${player.name}
+      </span>
+      ${iconHTML}
+    `;
+
+    const winRate = player.matches > 0
+      ? ((player.wins / player.matches) * 100).toFixed(1)
+      : "0.0";
+
+    if (winsTable) {
+      winsTable.innerHTML += `
+        <tr>
+          <td class="${rankClass}">#${index + 1}</td>
+          <td class="${rankClass}">${displayName}</td>
+          <td>${player.wins || 0}</td>
+          <td>${player.matches || 0}</td>
+          <td>${winRate}%</td>
+          <td>
+            <button class="action-btn"
+              onclick="openEdit(
+                '${player.id}',
+                '${player.type}',
+                '${player.name}',
+                ${player.mmr || 0},
+                ${player.wins || 0},
+                ${player.matches || 0},
+                '${player.flag || ""}',
+                '${player.icons || ""}',
+                '${player.glowColor || "#ffffff"}',
+                ${player.glowStrength || 0},
+                ${player.iconSize || 18}
+              )">
+              Edit
+            </button>
+
+            <button class="action-btn"
+              onclick="deletePlayer('${player.id}')">
+              Remove
+            </button>
+          </td>
+        </tr>
+      `;
+    }
+  });
+
+}););
 
 });
 </script>
