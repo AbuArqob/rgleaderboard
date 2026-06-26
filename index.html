@@ -1013,12 +1013,13 @@ onSnapshot(leaderboardRef, (snap) => {
     if (mmrTable) mmrTable.innerHTML = "";
     if (winsTable) winsTable.innerHTML = "";
 
-    boards[mode].sort((a, b) => {
-      if (a.type === "wins") {
-        return (b.wins || 0) - (a.wins || 0);
-      }
-      return (b.mmr || 0) - (a.mmr || 0);
-    });
+    const winsPlayers = boards[mode].filter(p => p.type === "wins");
+const mmrPlayers = boards[mode].filter(p => p.type !== "wins");
+
+winsPlayers.sort((a, b) => (b.wins || 0) - (a.wins || 0));
+mmrPlayers.sort((a, b) => (b.mmr || 0) - (a.mmr || 0));
+
+boards[mode] = [...mmrPlayers, ...winsPlayers];
 
     boards[mode].forEach((player, index) => {
 
