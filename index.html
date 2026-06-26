@@ -1016,14 +1016,13 @@ Object.keys(boards).forEach((mode) => {
   // =========================
   // SPLIT DATA (IMPORTANT FIX)
   // =========================
-  const mmrPlayers = boards[mode]
-    .filter(p => p.type === "mmr")
-    .sort((a, b) => (b.mmr || 0) - (a.mmr || 0));
+ const winsPlayers = boards[mode]
+  .filter(p => p.type === "wins")
+  .sort((a, b) => (b.wins || 0) - (a.wins || 0));
 
-  const winsPlayers = boards[mode]
-    .filter(p => p.type === "wins")
-    .sort((a, b) => (b.wins || 0) - (a.wins || 0));
-
+const mmrPlayers = boards[mode]
+  .filter(p => p.type !== "wins")
+  .sort((a, b) => (b.mmr || 0) - (a.mmr || 0));
   // =========================
   // MMR TABLE
   // =========================
@@ -1156,8 +1155,7 @@ Object.keys(boards).forEach((mode) => {
     }
   });
 
-}););
-
+});
 });
 </script>
 
