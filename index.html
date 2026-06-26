@@ -546,6 +546,11 @@ button:hover{
 
 <input type="number" id="editMMR" placeholder="MMR">
 
+  <div id="editWinsFields" style="display:none;">
+  <input type="number" id="editWins" placeholder="Wins">
+  <input type="number" id="editMatches" placeholder="Matches">
+</div>
+
 <input type="text" id="editFlag" placeholder="Flag Image URL">
 
 <input type="text" id="editIcons" placeholder="Icon URLs separated by commas">
@@ -918,18 +923,20 @@ window.openEdit = function(
 
   // switch fields based on type
   if (type === "wins") {
-    document.getElementById("mmrFields").style.display = "none";
-    document.getElementById("winsFields").style.display = "block";
 
-    document.getElementById("playerWins").value = wins || 0;
-    document.getElementById("playerMatches").value = matches || 0;
+  document.getElementById("editMMR").style.display = "none";
+  document.getElementById("editWinsFields").style.display = "block";
 
-  } else {
-    document.getElementById("winsFields").style.display = "none";
-    document.getElementById("mmrFields").style.display = "block";
+  document.getElementById("editWins").value = wins || 0;
+  document.getElementById("editMatches").value = matches || 0;
 
-    document.getElementById("editMMR").value = mmr || 0;
-  }
+} else {
+
+  document.getElementById("editMMR").style.display = "block";
+  document.getElementById("editWinsFields").style.display = "none";
+
+  document.getElementById("editMMR").value = mmr || 0;
+}
 };
 
 window.saveEdit = async function(){
@@ -957,15 +964,26 @@ window.saveEdit = async function(){
   const iconSize =
     Number(document.getElementById("editIconSize").value) || 18;
 
-  await updateDoc(doc(db,"leaderboard",editingPlayerId),{
-    name,
-    mmr,
-    flag,
-    icons,
-    glowColor,
-    glowStrength,
-    iconSize
-});
+const isWinsMode =
+  document.getElementById("editWinsFields").style.display === "block";
+
+const updateData = {
+  name,
+  flag,
+  icons,
+  glowColor,
+  glowStrength,
+  iconSize
+};
+
+if (isWinsMode) {
+  updateData.wins = Number(document.getElementById("editWins").value);
+  updateData.matches = Number(document.getElementById("editMatches").value);
+} else {
+  updateData.mmr = mmr;
+}
+
+await updateDoc(doc(db, "leaderboard", editingPlayerId), updateData);
 
   document.getElementById("editBox").style.display = "none";
 
