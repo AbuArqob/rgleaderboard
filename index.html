@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<button onclick="testLogin()">TEST LOGIN</button>
 <title>Rocket Goal.io Ranked Leaderboards</title>
 <link rel="icon" href="favicon.ico">
 <style>
@@ -264,6 +265,7 @@ button:hover{
 
 <body>
 
+
 <div class="bg"></div>
 
 <!-- LOGIN -->
@@ -476,13 +478,24 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB0EuuEkpVMjDcZ9-BSg27ioP5oZ866vqg",
-  authDomain: "rglb-db9d1.firebaseapp.com",
-  projectId: "rglb-db9d1",
-  storageBucket: "rglb-db9d1.firebasestorage.app",
-  messagingSenderId: "426022077306",
-  appId: "1:426022077306:web:429414c324c21320674cc3",
-  measurementId: "G-88T9T321RQ"
+  apiKey: "AIzaSyD29s2Jku_DZ42keIQAETgKg7HWt__QEwY",
+  authDomain: "rgleaderboard.firebaseapp.com",
+  projectId: "rgleaderboard",
+  storageBucket: "rgleaderboard.firebasestorage.app",
+  messagingSenderId: "247848634543",
+  appId: "1:247848634543:web:6a7e506d60544d46cc6c5a",
+  measurementId: "G-JW3Q972P9T"
+};
+
+
+window.testLogin = async function () {
+  try {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    console.log(result.user.email);
+  } catch (e) {
+    console.log("ERROR:", e.code, e.message);
+  }
 };
 
 const app = initializeApp(firebaseConfig);
