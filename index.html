@@ -891,14 +891,46 @@ window.deletePlayer = async function(id){
 
 window.openEdit = function(
   id,
+  type,
   name,
   mmr,
+  wins,
+  matches,
   flag,
   icons,
   glowColor,
   glowStrength,
   iconSize
 ){
+  if(!admin) return;
+
+  editingPlayerId = id;
+
+  document.getElementById("editBox").style.display = "block";
+
+  document.getElementById("editName").value = name || "";
+
+  document.getElementById("editFlag").value = flag || "";
+  document.getElementById("editIcons").value = icons || "";
+  document.getElementById("editIconSize").value = iconSize || 18;
+  document.getElementById("editGlowColor").value = glowColor || "#ffffff";
+  document.getElementById("editGlowStrength").value = glowStrength || 0;
+
+  // switch fields based on type
+  if (type === "wins") {
+    document.getElementById("mmrFields").style.display = "none";
+    document.getElementById("winsFields").style.display = "block";
+
+    document.getElementById("playerWins").value = wins || 0;
+    document.getElementById("playerMatches").value = matches || 0;
+
+  } else {
+    document.getElementById("winsFields").style.display = "none";
+    document.getElementById("mmrFields").style.display = "block";
+
+    document.getElementById("editMMR").value = mmr || 0;
+  }
+};
 
   if(!admin) return;
 
@@ -1042,16 +1074,19 @@ onSnapshot(leaderboardRef, (snap) => {
 
   <td>
     <button class="action-btn"
-      onclick="openEdit(
-        '${player.id}',
-        '${player.name}',
-        ${player.mmr || 0},
-        '${player.flag || ""}',
-        '${player.icons || ""}',
-        '${player.glowColor || "#ffffff"}',
-        ${player.glowStrength || 0},
-        ${player.iconSize || 18}
-      )">
+    onclick="openEdit(
+  '${player.id}',
+  '${player.type}',
+  '${player.name}',
+  ${player.mmr || 0},
+  ${player.wins || 0},
+  ${player.matches || 0},
+  '${player.flag || ""}',
+  '${player.icons || ""}',
+  '${player.glowColor || "#ffffff"}',
+  ${player.glowStrength || 0},
+  ${player.iconSize || 18}
+)">
       Edit
     </button>
 
@@ -1076,7 +1111,31 @@ onSnapshot(leaderboardRef, (snap) => {
             <tr>
               <td class="${rankClass}">#${index + 1}</td>
               <td class="${rankClass}">${displayName}</td>
-              <td>${player.mmr || 0}</td>
+             <td>${player.mmr || 0}</td>
+
+<td>
+  <button class="action-btn"
+    onclick="openEdit(
+      '${player.id}',
+      '${player.type}',
+      '${player.name}',
+      ${player.mmr || 0},
+      0,
+      0,
+      '${player.flag || ""}',
+      '${player.icons || ""}',
+      '${player.glowColor || "#ffffff"}',
+      ${player.glowStrength || 0},
+      ${player.iconSize || 18}
+    )">
+    Edit
+  </button>
+
+  <button class="action-btn"
+    onclick="deletePlayer('${player.id}')">
+    Remove
+  </button>
+</td>
             </tr>
           `;
         }
