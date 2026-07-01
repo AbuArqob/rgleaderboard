@@ -834,7 +834,9 @@ import {
   onSnapshot,
   deleteDoc,
   doc,
-  updateDoc
+  updateDoc,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -865,8 +867,11 @@ const provider = new GoogleAuthProvider();
 
 const leaderboardRef = collection(db,"leaderboard");
 
-const iconKeyRef = collection(db,"iconKey");
-
+const iconKeyRef = query(
+  collection(db, "iconKey"),
+  orderBy("createdAt", "asc")
+);
+  
 /* PUT YOUR EMAILS HERE */
 const adminEmails = [
   "underflagfg@gmail.com"
@@ -955,10 +960,11 @@ window.addIconKey = async function(){
 
   if(!icon || !label) return;
 
-  await addDoc(iconKeyRef,{
-    icon,
-    label
-  });
+await addDoc(collection(db, "iconKey"), {
+  icon,
+  label,
+  createdAt: Date.now()
+});
 
 }
 
