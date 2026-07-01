@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rocket Goal Leaderboard</title>
+<img class="site-logo" src="https://i.imgur.com/XPoVRsE.png" alt="Rocket Goal Logo">
+<title>RG LEADERBOARDS</title>
+<link rel="icon" type="image/png" href="https://i.imgur.com/XPoVRsE.png">
 <style>
 
 *{
@@ -99,26 +100,46 @@ body{
 }
 
 .icon-key{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
+    position:absolute;
 
-  margin-bottom:20px;
-  border:1px solid rgba(255,255,255,.06);
-  background:#23283b;
-  border-radius:14px;
-  padding:12px;
+    left:-290px;
+    top:273px;          /* adjust until it lines up with the table */
+
+    width:240px;
+
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+
+    padding:18px;
+
+    background:rgba(30,33,52,0.75);
+    border:1px solid rgba(168,85,247,0.25);
+    border-radius:18px;
+
+    backdrop-filter:blur(10px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.4),
+        inset 0 0 0 1px rgba(255,255,255,.03);
+}
+
+.page-layout{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:30px;          /* gap between icon key and tables */
 }
 
 .icon-key-item{
-  display:flex;
-  align-items:center;
-  gap:6px;
+    display:flex;
+    align-items:center;
+    gap:10px;
 
-  background:#313852;
-  padding:6px 10px;
-  border-radius:10px;
+    padding:8px 0;
+
+    background:transparent;
+    border-radius:0;
 }
 
 .icon-key-item img{
@@ -128,9 +149,10 @@ body{
 }
 
 .container{
-  max-width:400px;
-  margin:auto;
-  padding-top:40px;
+    max-width:550px;
+    margin:0 auto;
+    padding-top:40px;
+    position:relative;
 }
 
   .wins-box{
@@ -543,9 +565,6 @@ button:hover{
 
 <body>
 
-<img class="site-logo" src="https://i.imgur.com/XPoVRsE.png" alt="Rocket Goal Logo">
-
-
 <div class="bg"></div>
 
 <!-- LOGIN -->
@@ -558,9 +577,14 @@ button:hover{
 
 <h1 class="main-title">Competitive Rankings</h1>
 
-<div class="icon-key" id="iconKey"></div>
+<div class="page-layout">
 
-<div class="tabs">
+    <div class="icon-key" id="iconKey"></div>
+
+    <div class="leaderboard-content">
+
+        <div class="tabs">
+
   <button class="tab-btn active" onclick="showBoard('1v1', event)">1v1</button>
   <button class="tab-btn" onclick="showBoard('2v2', event)">2v2</button>
   <button class="tab-btn" onclick="showBoard('3v3', event)">3v3</button>
@@ -776,6 +800,10 @@ button:hover{
 <button class="tabs button" onclick="saveEdit()">Save Changes</button>
 
 </div>
+
+    </div> <!-- leaderboard-content -->
+
+</div> <!-- page-layout -->
 
 <div class="footer-note">
   <div class="footer-title">Leaderboard Hub</div>
